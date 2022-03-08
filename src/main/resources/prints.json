@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Dog",
+    "filename": "dog.GCODE",
+    "height": 50,
+    "width": 130,
+    "length": 100,
+    "filamentLength": [900]
+  },
+  {
+    "name": "House",
+    "filename": "house.GCODE",
+    "height": 110,
+    "width": 90,
+    "length": 90,
+    "filamentLength": [221, 300]
+  },
+  {
+    "name": "Frog",
+    "filename": "frog.GCODE",
+    "height": 40,
+    "width": 55,
+    "length": 60,
+    "filamentLength": [631]
+  },
+  {
+    "name": "Knife",
+    "filename": "knife.GCODE",
+    "height": 10,
+    "width": 100,
+    "length": 20,
+    "filamentLength": [501]
+  },
+  {
+    "name": "Spaceship",
+    "filename": "spaceship.GCODE",
+    "height": 100,
+    "width": 120,
+    "length": 230,
+    "filamentLength": [1500]
+  }
+]
