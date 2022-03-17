@@ -1,0 +1,80 @@
+package nl.saxion.model.newModel;
+
+import nl.saxion.model.*;
+
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+public class SpoolSwitchingVisitor implements PrinterVisitor {
+    private final ArrayList<PrintTask> pendingPrintTasks;
+    private final HashMap<Printer, PrintTask> runningPrintTasks;
+    private final ArrayList<Printer> freePrinters;
+    private final ArrayList<Spool> freeSpools;
+    private final PropertyChangeSupport support;
+    private PrintTask chosenPrintTask;
+
+    public SpoolSwitchingVisitor(ArrayList<PrintTask> pendingPrintTasks,
+                                 HashMap<Printer, PrintTask> runningPrintTasks,
+                                 ArrayList<Printer> freePrinters,
+                                 ArrayList<Spool> freeSpools,
+                                 PropertyChangeSupport support) {
+        this.pendingPrintTasks = pendingPrintTasks;
+        this.runningPrintTasks = runningPrintTasks;
+        this.freePrinters = freePrinters;
+        this.freeSpools = freeSpools;
+        this.support = support;
+    }
+
+    public PrintTask getChosenPrintTask() {
+        return this.chosenPrintTask;
+    }
+
+    @Override
+    public void visit(FDMPrinter fdmPrinter) {
+        // If we didn't find a print for the current spool we search for a print with the free spools.
+        for(PrintTask printTask: pendingPrintTasks) {
+            if(fdmPrinter.printFits(printTask.getPrint())
+                    && fdmPrinter.getSupportedFilaments().contains(printTask.getFilamentType())
+                    && printTask.getColors().size() <= fdmPrinter.getMaxSpools()) {
+                ArrayList<Spool> chosenSpools = new ArrayList<>();
+                for (int i = 0; i < printTask.getColors().size(); i++) {
+                    for (Spool spool : freeSpools) {
+                        // Checks if the spool matches the color and the filament type of the print task
+                        // And if ...
+                        if (spool.spoolMatch(printTask.getColors().get(i), printTask.getFilamentType())
+                                && !containsSpool(chosenSpools, printTask.getColors().get(i))) {
+                            chosenSpools.add(spool);
+                        }
+                    }
+                }
+
+                // We assume that if they are the same length that there is a match.
+                if (chosenSpools.size() == printTask.getColors().size()) {
+                    runningPrintTasks.put(fdmPrinter, printTask);
+                    freeSpools.addAll(Arrays.asList(fdmPrinter.getSpools()));
+                    fdmPrinter.setSpools(chosenSpools);
+                    for (Spool spool : chosenSpools) {
+                        support.firePropertyChange("instruction",
+                                "",
+                                "Please place spool " + spool.getId() + " in printer " + fdmPrinter.getName());
+                        freeSpools.remove(spool);
+                    }
+                    freePrinters.remove(fdmPrinter);
+                    this.chosenPrintTask = printTask;
+                }
+            }
+        }
+    }
+
+    public boolean containsSpool(final List<Spool> list, final String name){
+        return list.stream().anyMatch(o -> o.getColor().equals(name));
+    }
+
+    @Override
+    public void visit(SLAPrinter slaPrinter) {
+
+    }
+}

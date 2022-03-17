@@ -1,0 +1,38 @@
+package nl.saxion.model;
+
+import java.util.ArrayList;
+
+public abstract class Printer {
+    private int id;
+    private String name;
+    private String manufacturer;
+
+    public Printer(int id, String printerName, String manufacturer) {
+        this.id = id;
+        this.name = printerName;
+        this.manufacturer = manufacturer;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public abstract int CalculatePrintTime(String filename);
+
+    public abstract Spool[] getCurrentSpools();
+
+    public abstract void setCurrentSpools(ArrayList<Spool> spools);
+
+    public abstract boolean printFits(Print print);
+
+    @Override
+    public String toString() {
+        return  "ID: " + this.id + System.lineSeparator() +
+                "Name: " + this.name + System.lineSeparator() +
+                "Manufacturer: " + this.manufacturer + System.lineSeparator();
+    }
+
+    public String getName(){
+        return this.name;
+    }
+}
