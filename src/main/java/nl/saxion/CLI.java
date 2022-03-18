@@ -32,8 +32,8 @@ public class CLI implements PropertyChangeListener {
     private void handleChoice(int choice) {
         switch (choice) {
             case 1 -> addNewPrintTask();
-//            case 2 -> registerCompletion();
-//            case 3 -> registerPrinterFailure();
+            case 2 -> registerCompletion();
+            case 3 -> registerPrinterFailure();
             case 4 -> changePrintingStyle();
             case 5 -> startPrintQueue();
             case 6 -> showPrints();
@@ -83,25 +83,25 @@ public class CLI implements PropertyChangeListener {
         }
     }
 
-//    public void registerCompletion() {
-//        List<String> printers = this.model.getRunningPrinters();
-//        showCurrentlyRunningPrinters(printers);
-//
-//        displayPrompt("Printer that is done (ID)");
-//        int printerId = numberInputBetweenBounds(1, printers.size());
-//
-//        this.printerSystemController.registerCompletion(printerId);
-//    }
+    public void registerCompletion() {
+        List<String> printers = this.model.getRunningPrinters();
+        showCurrentlyRunningPrinters(printers);
 
-//    private void registerPrinterFailure() {
-//        List<String> printers = this.model.getRunningPrinters();
-//        showCurrentlyRunningPrinters(printers);
-//
-//        displayPrompt("Printer ID that failed");
-//        int printerId = numberInputBetweenBounds(1, printers.size());
-//
-//        this.printerSystemController.registerPrinterFailure(printerId);
-//    }
+        displayPrompt("Printer that is done (ID)");
+        int printerId = numberInputBetweenBounds(1, printers.size());
+
+        this.printerSystemController.registerCompletion(printerId);
+    }
+
+    private void registerPrinterFailure() {
+        List<String> printers = this.model.getRunningPrinters();
+        showCurrentlyRunningPrinters(printers);
+
+        displayPrompt("Printer ID that failed");
+        int printerId = numberInputBetweenBounds(1, printers.size());
+
+        this.printerSystemController.registerPrinterFailure(printerId);
+    }
 
     private void changePrintingStyle() {
 

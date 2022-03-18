@@ -47,6 +47,11 @@ public class StandardFDMPrinter implements FDMPrinter {
     }
 
     @Override
+    public int getId() {
+        return this.id;
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }

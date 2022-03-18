@@ -47,6 +47,7 @@ public class OutputStrings {
     public void addPrinter(Printer printer) {
         printers.add(printer);
     }
+    public void addSpool(Spool spool) {spools.add(spool);}
 
     public String menu() {
         return "Print Manager" + System.lineSeparator() +
@@ -105,6 +106,14 @@ public class OutputStrings {
 
     public void setCurrentPrintOnPrinter(int index, String print) {
         printers.get(index).setCurrentPrint(print);
+    }
+
+    public void setCurrentSpoolOnPrinter(int index, int spoolid) {
+        printers.get(index).setCurrentSpool(spoolid);
+    }
+
+    public void setCurrentSpoolOnPrinter(int index, int spool1, int spool2, int spool3, int spool4) {
+        printers.get(index).setCurrentSpool(spool1, spool2, spool3, spool4);
     }
 
     public void reduceSpoolLength(int index, double length) {

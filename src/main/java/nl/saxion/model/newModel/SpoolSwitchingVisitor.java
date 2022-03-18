@@ -59,6 +59,7 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
                     runningPrintTasks.put(fdmPrinter, printTask);
                     freeSpools.addAll(Arrays.asList(fdmPrinter.getSpools()));
                     fdmPrinter.setSpools(chosenSpools);
+
                     for (Spool spool : chosenSpools) {
                         this.support.firePropertyChange(
                                 "instruction",

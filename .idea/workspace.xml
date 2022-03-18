@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41e25acc-7012-40ff-8e77-954cfcd2407c" name="Changes" comment="" />
+    <list default="true" id="41e25acc-7012-40ff-8e77-954cfcd2407c" name="Changes" comment="feet: visitors">
+      <change afterPath="$PROJECT_DIR$/tests/TestSuite2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/CLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/StandardFDMPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/StandardFDMPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/OutputStrings.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OutputStrings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/TestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TestSuite.java" afterDir="false" />
+    </list>
+    <list id="b72f00df-3ba6-4687-b385-795508525678" name="Changes by kristiyan" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/PrinterSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/PrinterSystemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/Printer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/Printer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/PrinterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/PrinterManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,6 +41,18 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java">
+      <ranges>
+        <range start1="37" end1="38" start2="37" end2="43" changelist="b72f00df-3ba6-4687-b385-795508525678" />
+        <range start1="39" end1="41" start2="44" end2="45" changelist="b72f00df-3ba6-4687-b385-795508525678" />
+        <range start1="42" end1="43" start2="46" end2="47" changelist="b72f00df-3ba6-4687-b385-795508525678" />
+        <range start1="52" end1="53" start2="56" end2="56" changelist="b72f00df-3ba6-4687-b385-795508525678" />
+        <range start1="58" end1="58" start2="61" end2="62" changelist="41e25acc-7012-40ff-8e77-954cfcd2407c" />
+        <range start1="59" end1="60" start2="63" end2="65" changelist="b72f00df-3ba6-4687-b385-795508525678" />
+      </ranges>
+    </file>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -45,7 +71,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -54,6 +80,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/tests/models" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -114,6 +141,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="3dprintscheduler" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="3dprintscheduler" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.TestSuite" />
@@ -163,15 +203,8 @@
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nl/saxion/Main.java</url>
-          <line>2</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feet: visitors" />
+    <option name="LAST_COMMIT_MESSAGE" value="feet: visitors" />
   </component>
 </project>
