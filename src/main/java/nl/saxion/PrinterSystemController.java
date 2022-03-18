@@ -20,11 +20,11 @@ public class PrinterSystemController {
         this.model.startInitialQueue();
     }
 
-//    public void registerPrinterFailure(int printerId) {
-//        this.model.registerPrinterFailure(printerId);
-//    }
+    public void registerPrinterFailure(int printerId) {
+        this.model.registerPrinterFailure(printerId);
+    }
 
-//    public void registerCompletion(int printerId) {
-//        this.model.registerCompletion(printerId);
-//    }
+    public void registerCompletion(int printerId) {
+        this.model.registerCompletion(printerId);
+    }
 }

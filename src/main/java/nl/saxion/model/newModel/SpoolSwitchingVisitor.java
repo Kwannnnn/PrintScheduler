@@ -35,12 +35,16 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
     @Override
     public void visit(FDMPrinter fdmPrinter) {
         // If we didn't find a print for the current spool we search for a print with the free spools.
-        for(PrintTask printTask: pendingPrintTasks) {
+        for(PrintTask printTask : pendingPrintTasks) {
+            // FIXME: There was a bug with the original code
+            if (!this.freePrinters.contains(fdmPrinter)) {
+                return;
+            }
+
             if(fdmPrinter.printFits(printTask.getPrint())
-                    && fdmPrinter.getSupportedFilaments().contains(printTask.getFilamentType())
-                    && printTask.getColors().size() <= fdmPrinter.getMaxSpools()) {
+                    && fdmPrinter.getSupportedFilaments().contains(printTask.getFilamentType())) {
                 ArrayList<Spool> chosenSpools = new ArrayList<>();
-                for (int i = 0; i < printTask.getColors().size(); i++) {
+                for (int i = 0; i < fdmPrinter.getMaxSpools() && i < printTask.getColors().size(); i++) {
                     for (Spool spool : freeSpools) {
                         // Checks if the spool matches the color and the filament type of the print task
                         // And if ...
@@ -50,14 +54,14 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
                         }
                     }
                 }
-
                 // We assume that if they are the same length that there is a match.
                 if (chosenSpools.size() == printTask.getColors().size()) {
                     runningPrintTasks.put(fdmPrinter, printTask);
                     freeSpools.addAll(Arrays.asList(fdmPrinter.getSpools()));
                     fdmPrinter.setSpools(chosenSpools);
                     for (Spool spool : chosenSpools) {
-                        support.firePropertyChange("instruction",
+                        this.support.firePropertyChange(
+                                "instruction",
                                 "",
                                 "Please place spool " + spool.getId() + " in printer " + fdmPrinter.getName());
                         freeSpools.remove(spool);
