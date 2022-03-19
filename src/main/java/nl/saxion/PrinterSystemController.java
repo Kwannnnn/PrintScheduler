@@ -1,13 +1,13 @@
 package nl.saxion;
 
-import nl.saxion.model.newModel.PrinterManager;
+import nl.saxion.model.newModel.SystemFacade;
 
 import java.util.List;
 
 public class PrinterSystemController {
-    private final PrinterManager model;
+    private final SystemFacade model;
 
-    public PrinterSystemController(PrinterManager model) {
+    public PrinterSystemController(SystemFacade model) {
         this.model = model;
     }
 

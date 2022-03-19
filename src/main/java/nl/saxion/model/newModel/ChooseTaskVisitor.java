@@ -4,16 +4,17 @@ import nl.saxion.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ChooseTaskVisitor implements PrinterVisitor {
     private final ArrayList<PrintTask> pendingPrintTasks;
     private final HashMap<Printer, PrintTask> runningPrintTasks;
-    private final ArrayList<Printer> freePrinters;
+    private final List<Printer> freePrinters;
     private PrintTask chosenPrintTask;
 
     public ChooseTaskVisitor(ArrayList<PrintTask> pendingPrintTasks,
                              HashMap<Printer, PrintTask> runningPrintTasks,
-                             ArrayList<Printer> freePrinters) {
+                             List<Printer> freePrinters) {
         this.pendingPrintTasks = pendingPrintTasks;
         this.runningPrintTasks = runningPrintTasks;
         this.freePrinters = freePrinters;

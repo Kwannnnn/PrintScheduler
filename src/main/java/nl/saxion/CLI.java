@@ -1,6 +1,6 @@
 package nl.saxion;
 
-import nl.saxion.model.newModel.PrinterManager;
+import nl.saxion.model.newModel.SystemFacade;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -9,11 +9,11 @@ import java.util.*;
 public class CLI implements PropertyChangeListener {
     private static final int MENU_OPTIONS = 9;
 
-    private final PrinterManager model;
+    private final SystemFacade model;
     private final PrinterSystemController printerSystemController;
     private final Scanner scanner;
 
-    public CLI(PrinterManager model, PrinterSystemController printerSystemController) {
+    public CLI(SystemFacade model, PrinterSystemController printerSystemController) {
         this.scanner = new Scanner(System.in);
         this.model = model;
         this.printerSystemController = printerSystemController;
