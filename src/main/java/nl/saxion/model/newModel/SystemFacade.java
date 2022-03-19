@@ -31,6 +31,10 @@ public class SystemFacade {
         readPrintersFromFile();
     }
 
+    public void addListener(PropertyChangeListener listener) {
+        this.propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
     public void addPrintTask(int printId, List<String> colors, int type) {
         Print print = this.printManager.findPrintById(printId);
         if (print == null) {
@@ -68,35 +72,6 @@ public class SystemFacade {
 
         this.taskManager.addPrintTask(print, colors, ftype);
         fireAnInstruction("Added task to queue");
-    }
-
-    private void selectPrintTask(Printer printer) {
-        ChooseTaskVisitor chooseTaskVisitor = new ChooseTaskVisitor(
-                this.taskManager.getPendingPrintTasks(),
-                this.taskManager.getRunningPrintTasks(),
-                this.printerManager.getFreePrinters());
-        printer.accept(chooseTaskVisitor);
-
-        PrintTask chosenTask = chooseTaskVisitor.getChosenPrintTask();
-
-        if (chosenTask != null) {
-            this.taskManager.removePendingPrintTask(chosenTask);
-            fireAnInstruction("Started task " + chosenTask + " on printer " + printer.getName());
-        } else {
-            SpoolSwitchingVisitor spoolSwitchingVisitor = new SpoolSwitchingVisitor(
-                    this.taskManager.getPendingPrintTasks(),
-                    this.taskManager.getRunningPrintTasks(),
-                    this.printerManager.getFreePrinters(),
-                    this.spoolManager.getFreeSpools(),
-                    this.propertyChangeSupport);
-            printer.accept(spoolSwitchingVisitor);
-            chosenTask = spoolSwitchingVisitor.getChosenPrintTask();
-
-            if(chosenTask != null) {
-                this.taskManager.removePendingPrintTask(chosenTask);
-                fireAnInstruction("Started task " + chosenTask + " on printer " + printer.getName());
-            }
-        }
     }
 
     public void startInitialQueue() {
@@ -237,11 +212,8 @@ public class SystemFacade {
                 + foundEntry.getKey().getName());
 
         Printer printer = foundEntry.getKey();
-        // TODO: FilamentReducingVisitor
-//        Spool[] spools = printer.getCurrentSpools();
-//        for(int i=0; i<spools.length && i < task.getColors().size();i++) {
-//            spools[i].reduceLength(task.getPrint().getFilamentLength().get(i));
-//        }
+        FilamentReducingVisitor filamentReducingVisitor = new FilamentReducingVisitor(task);
+        printer.accept(filamentReducingVisitor);
         selectPrintTask(printer);
     }
 
@@ -264,33 +236,10 @@ public class SystemFacade {
                 + foundEntry.getKey().getName());
 
         Printer printer = foundEntry.getKey();
-        // TODO: FilamentReducingVisitor
-//        Spool[] spools = printer.getCurrentSpools();
-//        for(int i=0; i<spools.length && i < task.getColors().size();i++) {
-//            spools[i].reduceLength(task.getPrint().getFilamentLength().get(i));
-//        }
+        FilamentReducingVisitor filamentReducingVisitor = new FilamentReducingVisitor(task);
+        printer.accept(filamentReducingVisitor);
 
         selectPrintTask(printer);
-    }
-
-    private void fireAnError(String message) {
-        this.propertyChangeSupport.firePropertyChange(
-                "error",
-                "",
-                message
-        );
-    }
-
-    private void fireAnInstruction(String message) {
-        this.propertyChangeSupport.firePropertyChange(
-                "instruction",
-                "",
-                message
-        );
-    }
-
-    public void addListener(PropertyChangeListener listener) {
-        this.propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
     public List<String> getFilaments() {
@@ -358,5 +307,55 @@ public class SystemFacade {
                 .stream()
                 .map(PrintTask::toString)
                 .toList();
+    }
+
+    private void selectPrintTask(Printer printer) {
+        Optional<PrintTask> chosenTaskOptional =
+                chooseTaskUsingCurrentSpools(printer)
+                        .or(() -> chooseTaskUsingFreeSpools(printer));
+
+        if (chosenTaskOptional.isPresent()) {
+            PrintTask chosenTask = chosenTaskOptional.get();
+            this.taskManager.removePendingPrintTask(chosenTask);
+            fireAnInstruction("Started task " + chosenTask + " on printer " + printer.getName());
+        }
+    }
+
+    private Optional<PrintTask> chooseTaskUsingCurrentSpools(Printer printer) {
+        ChooseTaskVisitor chooseTaskVisitor = new ChooseTaskVisitor(
+                this.taskManager.getPendingPrintTasks(),
+                this.taskManager.getRunningPrintTasks(),
+                this.printerManager.getFreePrinters());
+        printer.accept(chooseTaskVisitor);
+
+        return chooseTaskVisitor.getChosenPrintTask();
+    }
+
+    private Optional<PrintTask> chooseTaskUsingFreeSpools(Printer printer) {
+        SpoolSwitchingVisitor spoolSwitchingVisitor = new SpoolSwitchingVisitor(
+                this.taskManager.getPendingPrintTasks(),
+                this.taskManager.getRunningPrintTasks(),
+                this.printerManager.getFreePrinters(),
+                this.spoolManager.getFreeSpools(),
+                this.propertyChangeSupport);
+        printer.accept(spoolSwitchingVisitor);
+
+        return spoolSwitchingVisitor.getChosenPrintTask();
+    }
+
+    private void fireAnError(String message) {
+        this.propertyChangeSupport.firePropertyChange(
+                "error",
+                "",
+                message
+        );
+    }
+
+    private void fireAnInstruction(String message) {
+        this.propertyChangeSupport.firePropertyChange(
+                "instruction",
+                "",
+                message
+        );
     }
 }

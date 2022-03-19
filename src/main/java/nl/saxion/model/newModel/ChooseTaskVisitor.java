@@ -4,6 +4,7 @@ import nl.saxion.model.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class ChooseTaskVisitor implements PrinterVisitor {
     private final List<PrintTask> pendingPrintTasks;
@@ -19,8 +20,8 @@ public class ChooseTaskVisitor implements PrinterVisitor {
         this.freePrinters = freePrinters;
     }
 
-    public PrintTask getChosenPrintTask() {
-        return this.chosenPrintTask;
+    public Optional<PrintTask> getChosenPrintTask() {
+        return Optional.ofNullable(this.chosenPrintTask);
     }
 
     @Override

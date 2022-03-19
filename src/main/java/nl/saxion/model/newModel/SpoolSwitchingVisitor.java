@@ -3,10 +3,7 @@ package nl.saxion.model.newModel;
 import nl.saxion.model.*;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SpoolSwitchingVisitor implements PrinterVisitor {
     private final List<PrintTask> pendingPrintTasks;
@@ -28,8 +25,8 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
         this.support = support;
     }
 
-    public PrintTask getChosenPrintTask() {
-        return this.chosenPrintTask;
+    public Optional<PrintTask> getChosenPrintTask() {
+        return Optional.ofNullable(this.chosenPrintTask);
     }
 
     @Override
