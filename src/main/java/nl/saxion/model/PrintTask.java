@@ -7,7 +7,7 @@ public class PrintTask {
     private List<String> colors;
     private FilamentType filamentType;
 
-    public PrintTask(Print print, List<String> colors, FilamentType filamentType){
+    public PrintTask(Print print, List<String> colors, FilamentType filamentType) {
         this.print = print;
         this.colors = colors;
         this.filamentType = filamentType;

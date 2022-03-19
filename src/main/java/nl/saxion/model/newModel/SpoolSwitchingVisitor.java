@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SpoolSwitchingVisitor implements PrinterVisitor {
-    private final ArrayList<PrintTask> pendingPrintTasks;
+    private final List<PrintTask> pendingPrintTasks;
     private final HashMap<Printer, PrintTask> runningPrintTasks;
     private final List<Printer> freePrinters;
     private final List<Spool> freeSpools;
     private final PropertyChangeSupport support;
     private PrintTask chosenPrintTask;
 
-    public SpoolSwitchingVisitor(ArrayList<PrintTask> pendingPrintTasks,
+    public SpoolSwitchingVisitor(List<PrintTask> pendingPrintTasks,
                                  HashMap<Printer, PrintTask> runningPrintTasks,
                                  List<Printer> freePrinters,
                                  List<Spool> freeSpools,

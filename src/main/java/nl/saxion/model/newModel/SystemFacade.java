@@ -18,15 +18,14 @@ public class SystemFacade {
     private final PrinterManager printerManager;
     private final PrintManager printManager;
     private final SpoolManager spoolManager;
-
-    private ArrayList<PrintTask> pendingPrintTasks = new ArrayList<>();
-    private HashMap<Printer, PrintTask> runningPrintTasks = new HashMap<>();
+    private final TaskManager taskManager;
 
     public SystemFacade() {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
         this.printerManager = new PrinterManager();
         this.printManager = new PrintManager();
         this.spoolManager = new SpoolManager();
+        this.taskManager = new TaskManager();
         readPrintsFromFile();
         readSpoolsFromFile();
         readPrintersFromFile();
@@ -67,27 +66,26 @@ public class SystemFacade {
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
 
-        PrintTask task = new PrintTask(print, colors, ftype);
-        this.pendingPrintTasks.add(task);
+        this.taskManager.addPrintTask(print, colors, ftype);
         fireAnInstruction("Added task to queue");
     }
 
     private void selectPrintTask(Printer printer) {
         ChooseTaskVisitor chooseTaskVisitor = new ChooseTaskVisitor(
-                this.pendingPrintTasks,
-                this.runningPrintTasks,
+                this.taskManager.getPendingPrintTasks(),
+                this.taskManager.getRunningPrintTasks(),
                 this.printerManager.getFreePrinters());
         printer.accept(chooseTaskVisitor);
 
         PrintTask chosenTask = chooseTaskVisitor.getChosenPrintTask();
 
         if (chosenTask != null) {
-            this.pendingPrintTasks.remove(chosenTask);
+            this.taskManager.removePendingPrintTask(chosenTask);
             fireAnInstruction("Started task " + chosenTask + " on printer " + printer.getName());
         } else {
             SpoolSwitchingVisitor spoolSwitchingVisitor = new SpoolSwitchingVisitor(
-                    this.pendingPrintTasks,
-                    this.runningPrintTasks,
+                    this.taskManager.getPendingPrintTasks(),
+                    this.taskManager.getRunningPrintTasks(),
                     this.printerManager.getFreePrinters(),
                     this.spoolManager.getFreeSpools(),
                     this.propertyChangeSupport);
@@ -95,7 +93,7 @@ public class SystemFacade {
             chosenTask = spoolSwitchingVisitor.getChosenPrintTask();
 
             if(chosenTask != null) {
-                pendingPrintTasks.remove(chosenTask);
+                this.taskManager.removePendingPrintTask(chosenTask);
                 fireAnInstruction("Started task " + chosenTask + " on printer " + printer.getName());
             }
         }
@@ -114,7 +112,7 @@ public class SystemFacade {
     public List<String> getRunningPrinters() {
         List<String> result = new ArrayList<>();
         for(Printer p : this.printerManager.getPrinters()) {
-            PrintTask printerCurrentTask = getPrinterCurrentTask(p);
+            PrintTask printerCurrentTask = this.taskManager.getPrinterCurrentTask(p);
             if(printerCurrentTask != null) {
                 result.add(p.getId() + ": " +p.getName() + " - " + printerCurrentTask);
             }
@@ -122,15 +120,6 @@ public class SystemFacade {
 
         return result;
     }
-
-    public PrintTask getPrinterCurrentTask(Printer printer) {
-        if(!runningPrintTasks.containsKey(printer)) {
-            return null;
-        }
-        return runningPrintTasks.get(printer);
-    }
-
-
 
     private void readSpoolsFromFile() {
         JSONParser jsonParser = new JSONParser();
@@ -229,7 +218,7 @@ public class SystemFacade {
 
     public void registerPrinterFailure(int printerId) {
         Map.Entry<Printer, PrintTask> foundEntry = null;
-        for (Map.Entry<Printer, PrintTask> entry : runningPrintTasks.entrySet()) {
+        for (Map.Entry<Printer, PrintTask> entry : this.taskManager.getRunningPrintTasks().entrySet()) {
             if (entry.getKey().getId() == printerId) {
                 foundEntry = entry;
                 break;
@@ -240,8 +229,9 @@ public class SystemFacade {
             return;
         }
         PrintTask task = foundEntry.getValue();
-        pendingPrintTasks.add(task); // add the task back to the queue.
-        runningPrintTasks.remove(foundEntry.getKey());
+        // TODO: this is not good
+        this.taskManager.getPendingPrintTasks().add(task); // add the task back to the queue.
+        this.taskManager.removeRunningPrintTask(foundEntry.getKey());
 
         fireAnInstruction("Task " + task + " removed from printer "
                 + foundEntry.getKey().getName());
@@ -257,7 +247,7 @@ public class SystemFacade {
 
     public void registerCompletion(int printerId) {
         Map.Entry<Printer, PrintTask> foundEntry = null;
-        for (Map.Entry<Printer, PrintTask> entry : runningPrintTasks.entrySet()) {
+        for (Map.Entry<Printer, PrintTask> entry : this.taskManager.getRunningPrintTasks().entrySet()) {
             if (entry.getKey().getId() == printerId) {
                 foundEntry = entry;
                 break;
@@ -268,7 +258,7 @@ public class SystemFacade {
             return;
         }
         PrintTask task = foundEntry.getValue();
-        runningPrintTasks.remove(foundEntry.getKey());
+        this.taskManager.removeRunningPrintTask(foundEntry.getKey());
 
         fireAnInstruction("Task " + task + " removed from printer "
                 + foundEntry.getKey().getName());
@@ -331,7 +321,7 @@ public class SystemFacade {
         List<String> result = new ArrayList<>();
         for (var p : this.printerManager.getPrinters()) {
             StringBuilder printer = new StringBuilder(p.toString());
-            PrintTask currentTask = getPrinterCurrentTask(p);
+            PrintTask currentTask = this.taskManager.getPrinterCurrentTask(p);
             if (currentTask != null) {
                 printer.append("Current Print Task: ")
                         .append(currentTask)
@@ -364,7 +354,7 @@ public class SystemFacade {
     }
 
     public List<String> getPendingPrintTasks() {
-        return this.pendingPrintTasks
+        return this.taskManager.getPendingPrintTasks()
                 .stream()
                 .map(PrintTask::toString)
                 .toList();
