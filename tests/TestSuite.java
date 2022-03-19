@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.math.BigInteger;
 
-import nl.saxion.Main;
+import nl.saxion.refactor.Main;
 import org.junit.*;
 
 public class TestSuite {

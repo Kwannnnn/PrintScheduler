@@ -1,21 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41e25acc-7012-40ff-8e77-954cfcd2407c" name="Changes" comment="feet: visitors">
-      <change afterPath="$PROJECT_DIR$/tests/TestSuite2.java" afterDir="false" />
+    <list default="true" id="41e25acc-7012-40ff-8e77-954cfcd2407c" name="Changes" comment="chore: Reorganize package structure">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/CLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/PrinterSystemController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/exception/PrintNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/FDMPrinter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/FilamentType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/Print.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/PrintTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/Printer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/SLAPrinter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/Spool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/SystemFacade.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/factory/PrinterFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/io/FileLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/io/JsonLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/io/PrintJsonLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/io/PrinterJsonLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/io/SpoolJsonLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/manager/PrintManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/manager/PrinterManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/manager/SpoolManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/manager/TaskManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/visitor/ChooseTaskVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/visitor/FilamentReducingVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/visitor/PrinterVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/refactor/model/visitor/SpoolSwitchingVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/printers-expanded.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/spools-expanded.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/CLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/StandardFDMPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/StandardFDMPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/OutputStrings.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/OutputStrings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/CLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/PrinterSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/PrinterSystemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/exception/PrintNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/exception/PrintNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/FDMPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/FDMPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/FilamentType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/FilamentType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/Print.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/Print.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/PrintTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/PrintTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/Printer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/Printer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/SLAPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/SLAPrinter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/Spool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/Spool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/SystemFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/SystemFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/factory/PrinterFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/factory/PrinterFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/io/FileLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/io/FileLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/io/JsonLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/io/JsonLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/io/PrintJsonLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/io/PrintJsonLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/io/PrinterJsonLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/io/PrinterJsonLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/io/SpoolJsonLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/io/SpoolJsonLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/manager/PrintManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/manager/PrintManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/manager/PrinterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/manager/PrinterManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/manager/SpoolManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/manager/SpoolManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/manager/TaskManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/manager/TaskManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/visitor/ChooseTaskVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/visitor/ChooseTaskVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/visitor/FilamentReducingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/visitor/FilamentReducingVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/visitor/PrinterVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/visitor/PrinterVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/visitor/SpoolSwitchingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/expansion/model/visitor/SpoolSwitchingVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/TestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TestSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/TestSuite2.java" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TestSuite2.java" afterDir="false" />
     </list>
-    <list id="b72f00df-3ba6-4687-b385-795508525678" name="Changes by kristiyan" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/PrinterSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/PrinterSystemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/Printer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/Printer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/PrinterManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/PrinterManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java" afterDir="false" />
-    </list>
+    <list id="b72f00df-3ba6-4687-b385-795508525678" name="Changes by kristiyan" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,18 +88,6 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/nl/saxion/model/newModel/SpoolSwitchingVisitor.java">
-      <ranges>
-        <range start1="37" end1="38" start2="37" end2="43" changelist="b72f00df-3ba6-4687-b385-795508525678" />
-        <range start1="39" end1="41" start2="44" end2="45" changelist="b72f00df-3ba6-4687-b385-795508525678" />
-        <range start1="42" end1="43" start2="46" end2="47" changelist="b72f00df-3ba6-4687-b385-795508525678" />
-        <range start1="52" end1="53" start2="56" end2="56" changelist="b72f00df-3ba6-4687-b385-795508525678" />
-        <range start1="58" end1="58" start2="61" end2="62" changelist="41e25acc-7012-40ff-8e77-954cfcd2407c" />
-        <range start1="59" end1="60" start2="63" end2="65" changelist="b72f00df-3ba6-4687-b385-795508525678" />
-      </ranges>
-    </file>
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -71,7 +106,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -80,6 +115,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/nl/saxion/expansion" />
+      <recent name="$PROJECT_DIR$/src/main/java/nl/saxion/refactor" />
       <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/tests/models" />
     </key>
@@ -91,13 +129,13 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestSuite">
+  <component name="RunManager" selected="JUnit.TestSuite2">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="nl.saxion.Main" />
       <module name="3dprintscheduler" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="nl.saxion.model.*" />
+          <option name="PATTERN" value="nl.saxion.model.visitor.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -141,15 +179,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
+    <configuration name="TestSuite2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="3dprintscheduler" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="3dprintscheduler" />
-      <option name="filePath" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestSuite2" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,9 +191,11 @@
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.TestSuite" />
+      <item itemvalue="JUnit.TestSuite2" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestSuite2" />
         <item itemvalue="JUnit.TestSuite" />
         <item itemvalue="Application.Main" />
       </list>
@@ -186,7 +222,45 @@
       <workItem from="1647282955432" duration="13520000" />
       <workItem from="1647511438461" duration="20572000" />
       <workItem from="1647538830774" duration="6106000" />
+      <workItem from="1647640471979" duration="15000" />
+      <workItem from="1647678774171" duration="12622000" />
     </task>
+    <task id="LOCAL-00001" summary="refactor: Spool and Print managers">
+      <created>1647680946006</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1647680946006</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refactor: Printer Manager">
+      <created>1647681866260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1647681866260</updated>
+    </task>
+    <task id="LOCAL-00003" summary="refactor: Task Manager">
+      <created>1647682776333</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1647682776333</updated>
+    </task>
+    <task id="LOCAL-00004" summary="refactor: FilamentReducingVisitor">
+      <created>1647685842983</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1647685842983</updated>
+    </task>
+    <task id="LOCAL-00005" summary="chore: Reorganize package structure">
+      <created>1647687789829</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1647687789829</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,6 +279,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feet: visitors" />
-    <option name="LAST_COMMIT_MESSAGE" value="feet: visitors" />
+    <MESSAGE value="refactor: Spool and Print managers" />
+    <MESSAGE value="refactor: Printer Manager" />
+    <MESSAGE value="refactor: Task Manager" />
+    <MESSAGE value="refactor: FilamentReducingVisitor" />
+    <MESSAGE value="chore: Reorganize package structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: Reorganize package structure" />
   </component>
 </project>

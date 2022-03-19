@@ -1,6 +1,6 @@
 import models.Printer;
 import models.Spool;
-import nl.saxion.Main;
+import nl.saxion.expansion.Main;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
