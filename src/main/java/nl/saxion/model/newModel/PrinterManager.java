@@ -1,19 +1,29 @@
 package nl.saxion.model.newModel;
 
-import nl.saxion.model.FilamentType;
+import nl.saxion.io.PrinterFactory;
+import nl.saxion.io.PrinterJsonLoader;
 import nl.saxion.model.Spool;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrinterManager {
     private final List<Printer> printers;
     private final List<Printer> freePrinters;
+    private final SpoolManager spoolManager;
 
-    public PrinterManager() {
+
+    public PrinterManager(String filename, SpoolManager spoolManager) throws IOException, ParseException {
         this.printers = new ArrayList<>();
         this.freePrinters = new ArrayList<>();
+        this.spoolManager = spoolManager;
+
+        var printerJsonLoader = new PrinterJsonLoader(filename, this);
+        printerJsonLoader.loadFile();
+
     }
 
     public void addPrinter(
@@ -25,47 +35,26 @@ public class PrinterManager {
             int maxY,
             int maxZ,
             int maxColors,
-            JSONArray currentSpools,
-            SpoolManager spoolManager) {
+            JSONArray currentSpools) {
+
         ArrayList<Spool> cspools = new ArrayList<>();
         for (var spool : currentSpools) {
             cspools.add(spoolManager.getSpoolByID(((Long) spool).intValue()));
         }
 
-        Printer printer;
-        switch (printerType) {
-            case 1, 3 -> {
-                printer = new StandardFDMPrinter(
-                        id,
-                        printerName,
-                        manufacturer,
-                        maxX,
-                        maxY,
-                        maxZ,
-                        maxColors,
-                        List.of(FilamentType.PLA, FilamentType.PETG)
-                );
+        PrinterFactory printerFactory = new PrinterFactory();
 
-                ((StandardFDMPrinter) printer).setSpools(cspools);
+        Printer printer = printerFactory.createPrinter(
+                id,
+                printerType,
+                printerName,
+                manufacturer,
+                maxX,
+                maxY,
+                maxZ,
+                maxColors,
+                cspools);
 
-            }
-            case 2 -> {
-                printer = new StandardFDMPrinter(
-                        id,
-                        printerName,
-                        manufacturer,
-                        maxX,
-                        maxY,
-                        maxZ,
-                        maxColors,
-                        List.of(FilamentType.PLA, FilamentType.PETG, FilamentType.ABS)
-                );
-
-                ((StandardFDMPrinter) printer).setSpools(cspools);
-
-            }
-            default -> throw new IllegalArgumentException("Invalid printer type '" + printerType + '"');
-        }
 
         for(Spool spool: cspools) {
             spoolManager.getFreeSpools().remove(spool);

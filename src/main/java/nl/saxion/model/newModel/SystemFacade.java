@@ -1,6 +1,9 @@
 package nl.saxion.model.newModel;
 
-import nl.saxion.model.*;
+import nl.saxion.model.FilamentType;
+import nl.saxion.model.Print;
+import nl.saxion.model.PrintTask;
+import nl.saxion.model.Spool;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,15 +23,12 @@ public class SystemFacade {
     private final SpoolManager spoolManager;
     private final TaskManager taskManager;
 
-    public SystemFacade() {
+    public SystemFacade() throws IOException, ParseException {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
-        this.printerManager = new PrinterManager();
-        this.printManager = new PrintManager();
-        this.spoolManager = new SpoolManager();
         this.taskManager = new TaskManager();
-        readPrintsFromFile();
-        readSpoolsFromFile();
-        readPrintersFromFile();
+        this.spoolManager = new SpoolManager("spools.json");
+        this.printerManager = new PrinterManager("printers.json", spoolManager);
+        this.printManager = new PrintManager("prints.json");
     }
 
     public void addListener(PropertyChangeListener listener) {
@@ -96,6 +96,102 @@ public class SystemFacade {
         return result;
     }
 
+//
+//
+//    private void readSpoolsFromFile() {
+//        JSONParser jsonParser = new JSONParser();
+//        URL spoolsResource = getClass().getResource("/spools.json");
+//        if (spoolsResource == null) {
+//            System.err.println("Warning: Could not find spools.json file");
+//            return;
+//        }
+//        try (FileReader reader = new FileReader(spoolsResource.getFile())) {
+//            JSONArray spools = (JSONArray) jsonParser.parse(reader);
+//            for (Object p : spools) {
+//                JSONObject spool = (JSONObject) p;
+//                int id = ((Long) spool.get("id")).intValue();
+//                String color = (String) spool.get("color");
+//                String filamentType = (String) spool.get("filamentType");
+//                double length = (Double) spool.get("length");
+//                FilamentType type;
+//                switch (filamentType) {
+//                    case "PLA":
+//                        type = FilamentType.PLA;
+//                        break;
+//                    case "PETG":
+//                        type = FilamentType.PETG;
+//                        break;
+//                    case "ABS":
+//                        type = FilamentType.ABS;
+//                        break;
+//                    default:
+//                        System.out.println("Not a valid filamentType, bailing out");
+//                        return;
+//                }
+//                this.spoolManager.addSpool(id, color, type, length);
+//            }
+//        } catch (IOException | ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//
+//    private void readPrintsFromFile() {
+//        JSONParser jsonParser = new JSONParser();
+//        URL printResource = getClass().getResource("/prints.json");
+//        if (printResource == null) {
+//            System.err.println("Warning: Could not find prints.json file");
+//            return;
+//        }
+//        try (FileReader reader = new FileReader(printResource.getFile())) {
+//            JSONArray prints = (JSONArray) jsonParser.parse(reader);
+//            for (Object p : prints) {
+//                JSONObject print = (JSONObject) p;
+//                String name = (String) print.get("name");
+//                String filename = (String) print.get("filename");
+//                int height = ((Long) print.get("height")).intValue();
+//                int width = ((Long) print.get("width")).intValue();
+//                int length = ((Long) print.get("length")).intValue();
+//                //int filamentLength = ((Long) print.get("filamentLength")).intValue();
+//                JSONArray fLength = (JSONArray) print.get("filamentLength");
+//                ArrayList<Integer> filamentLength = new ArrayList();
+//                for(int i = 0; i < fLength.size(); i++) {
+//                    filamentLength.add(((Long)fLength.get(i)).intValue());
+//                }
+//                this.printManager.addPrint(name, filename, height, width, length, filamentLength);
+//            }
+//        } catch (IOException | ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private void readPrintersFromFile() {
+//        JSONParser jsonParser = new JSONParser();
+//        URL printersResource = getClass().getResource("/printers.json");
+//        if (printersResource == null) {
+//            System.err.println("Warning: Could not find printers.json file");
+//            return;
+//        }
+//        try (FileReader reader = new FileReader(printersResource.getFile())) {
+//            JSONArray printers = (JSONArray) jsonParser.parse(reader);
+//            for (Object p : printers) {
+//                JSONObject printer = (JSONObject) p;
+//                int id = ((Long) printer.get("id")).intValue();
+//                int type = ((Long) printer.get("type")).intValue();
+//                String name = (String) printer.get("name");
+//                String manufacturer = (String) printer.get("manufacturer");
+//                int maxX = ((Long) printer.get("maxX")).intValue();
+//                int maxY = ((Long) printer.get("maxY")).intValue();
+//                int maxZ = ((Long) printer.get("maxZ")).intValue();
+//                int maxColors = ((Long) printer.get("maxColors")).intValue();
+//                // TODO: Add current Spool
+//                JSONArray currentSpools = (JSONArray) printer.get("currentSpools");
+//                this.printerManager.addPrinter(id, type, name, manufacturer, maxX, maxY, maxZ, maxColors, currentSpools, this.spoolManager);
+//            }
+//        } catch (IOException | ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
     private void readSpoolsFromFile() {
         JSONParser jsonParser = new JSONParser();
         URL spoolsResource = getClass().getResource("/spools.json");
@@ -162,34 +258,34 @@ public class SystemFacade {
             e.printStackTrace();
         }
     }
-
-    private void readPrintersFromFile() {
-        JSONParser jsonParser = new JSONParser();
-        URL printersResource = getClass().getResource("/printers.json");
-        if (printersResource == null) {
-            System.err.println("Warning: Could not find printers.json file");
-            return;
-        }
-        try (FileReader reader = new FileReader(printersResource.getFile())) {
-            JSONArray printers = (JSONArray) jsonParser.parse(reader);
-            for (Object p : printers) {
-                JSONObject printer = (JSONObject) p;
-                int id = ((Long) printer.get("id")).intValue();
-                int type = ((Long) printer.get("type")).intValue();
-                String name = (String) printer.get("name");
-                String manufacturer = (String) printer.get("manufacturer");
-                int maxX = ((Long) printer.get("maxX")).intValue();
-                int maxY = ((Long) printer.get("maxY")).intValue();
-                int maxZ = ((Long) printer.get("maxZ")).intValue();
-                int maxColors = ((Long) printer.get("maxColors")).intValue();
-                // TODO: Add current Spool
-                JSONArray currentSpools = (JSONArray) printer.get("currentSpools");
-                this.printerManager.addPrinter(id, type, name, manufacturer, maxX, maxY, maxZ, maxColors, currentSpools, this.spoolManager);
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    private void readPrintersFromFile() {
+//        JSONParser jsonParser = new JSONParser();
+//        URL printersResource = getClass().getResource("/printers.json");
+//        if (printersResource == null) {
+//            System.err.println("Warning: Could not find printers.json file");
+//            return;
+//        }
+//        try (FileReader reader = new FileReader(printersResource.getFile())) {
+//            JSONArray printers = (JSONArray) jsonParser.parse(reader);
+//            for (Object p : printers) {
+//                JSONObject printer = (JSONObject) p;
+//                int id = ((Long) printer.get("id")).intValue();
+//                int type = ((Long) printer.get("type")).intValue();
+//                String name = (String) printer.get("name");
+//                String manufacturer = (String) printer.get("manufacturer");
+//                int maxX = ((Long) printer.get("maxX")).intValue();
+//                int maxY = ((Long) printer.get("maxY")).intValue();
+//                int maxZ = ((Long) printer.get("maxZ")).intValue();
+//                int maxColors = ((Long) printer.get("maxColors")).intValue();
+//                // TODO: Add current Spool
+//                JSONArray currentSpools = (JSONArray) printer.get("currentSpools");
+//                this.printerManager.addPrinter(id, type, name, manufacturer, maxX, maxY, maxZ, maxColors, currentSpools, this.spoolManager);
+//            }
+//        } catch (IOException | ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void registerPrinterFailure(int printerId) {
         Map.Entry<Printer, PrintTask> foundEntry = null;
