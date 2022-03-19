@@ -1,6 +1,6 @@
 package nl.saxion;
 
-import nl.saxion.model.newModel.SystemFacade;
+import nl.saxion.model.SystemFacade;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -1,6 +1,7 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.manager;
 
-import nl.saxion.io.SpoolJsonLoader;
+import nl.saxion.model.Constants;
+import nl.saxion.model.io.SpoolJsonLoader;
 import nl.saxion.model.FilamentType;
 import nl.saxion.model.Spool;
 import org.json.simple.parser.ParseException;
@@ -13,14 +14,12 @@ public class SpoolManager {
     private final List<Spool> spools;
     private final List<Spool> freeSpools; // TODO: Decide if this should be used at all.
 
-    public SpoolManager(String filename) throws IOException, ParseException {
+    public SpoolManager() throws IOException, ParseException {
         this.freeSpools = new ArrayList<>();
         this.spools = new ArrayList<>();
 
-
-            var SpoolJsonLoader = new SpoolJsonLoader(filename, this);
-            SpoolJsonLoader.loadFile();
-
+        new SpoolJsonLoader(Constants.SPOOLS_FILENAME, this)
+                .loadFile();
     }
 
     public void addSpool(int id, String color, FilamentType filamentType, double length) {

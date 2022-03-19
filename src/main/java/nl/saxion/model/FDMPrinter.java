@@ -1,12 +1,10 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model;
 
-import nl.saxion.model.FilamentType;
-import nl.saxion.model.Print;
-import nl.saxion.model.Spool;
+import nl.saxion.model.visitor.PrinterVisitor;
 
 import java.util.List;
 
-public class StandardFDMPrinter implements FDMPrinter {
+public class FDMPrinter implements Printer {
     private final int id;
     private final String name;
     private final String manufacturer;
@@ -17,7 +15,7 @@ public class StandardFDMPrinter implements FDMPrinter {
     private final Spool[] spools;
     private final List<FilamentType> supportedFilaments;
 
-    public StandardFDMPrinter(int id, String name, String manufacturer, int maxX, int maxY, int maxZ, int maxSpools, List<FilamentType> supportedFilaments) {
+    public FDMPrinter(int id, String name, String manufacturer, int maxX, int maxY, int maxZ, int maxSpools, List<FilamentType> supportedFilaments) {
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -29,17 +27,18 @@ public class StandardFDMPrinter implements FDMPrinter {
         this.spools = new Spool[this.maxSpools];
     }
 
-    @Override
     public int getMaxSpools() {
         return this.maxSpools;
     }
 
-    @Override
     public Spool[] getSpools() {
         return this.spools;
     }
 
-    @Override
+    public List<FilamentType> getSupportedFilaments() {
+        return this.supportedFilaments;
+    }
+
     public void setSpools(List<Spool> spools) {
         for (int i = 0; i < spools.size() && i < this.maxSpools; i++) {
             this.spools[i] = spools.get(i);
@@ -59,11 +58,6 @@ public class StandardFDMPrinter implements FDMPrinter {
     @Override
     public boolean printFits(Print print) {
         return print.getHeight() <= maxZ && print.getWidth() <= maxX && print.getLength() <= maxY;
-    }
-
-    @Override
-    public List<FilamentType> getSupportedFilaments() {
-        return this.supportedFilaments;
     }
 
     @Override

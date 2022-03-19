@@ -1,9 +1,9 @@
-package nl.saxion.io;
+package nl.saxion.model.factory;
 
 import nl.saxion.model.FilamentType;
 import nl.saxion.model.Spool;
-import nl.saxion.model.newModel.Printer;
-import nl.saxion.model.newModel.StandardFDMPrinter;
+import nl.saxion.model.Printer;
+import nl.saxion.model.FDMPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class PrinterFactory {
         Printer printer;
         switch (printerType) {
             case 1, 3 -> {
-                printer = new StandardFDMPrinter(
+                printer = new FDMPrinter(
                         id,
                         printerName,
                         manufacturer,
@@ -24,11 +24,11 @@ public class PrinterFactory {
                         List.of(FilamentType.PLA, FilamentType.PETG)
                 );
 
-                ((StandardFDMPrinter) printer).setSpools(cspools);
+                ((FDMPrinter) printer).setSpools(cspools);
 
             }
             case 2 -> {
-                printer = new StandardFDMPrinter(
+                printer = new FDMPrinter(
                         id,
                         printerName,
                         manufacturer,
@@ -39,7 +39,7 @@ public class PrinterFactory {
                         List.of(FilamentType.PLA, FilamentType.PETG, FilamentType.ABS)
                 );
 
-                ((StandardFDMPrinter) printer).setSpools(cspools);
+                ((FDMPrinter) printer).setSpools(cspools);
 
             }
             default -> throw new IllegalArgumentException("Invalid printer type '" + printerType + '"');

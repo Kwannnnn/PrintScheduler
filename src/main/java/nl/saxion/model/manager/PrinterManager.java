@@ -1,7 +1,9 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.manager;
 
-import nl.saxion.io.PrinterFactory;
-import nl.saxion.io.PrinterJsonLoader;
+import nl.saxion.model.Constants;
+import nl.saxion.model.factory.PrinterFactory;
+import nl.saxion.model.io.PrinterJsonLoader;
+import nl.saxion.model.Printer;
 import nl.saxion.model.Spool;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
@@ -16,14 +18,13 @@ public class PrinterManager {
     private final SpoolManager spoolManager;
 
 
-    public PrinterManager(String filename, SpoolManager spoolManager) throws IOException, ParseException {
+    public PrinterManager(SpoolManager spoolManager) throws IOException, ParseException {
         this.printers = new ArrayList<>();
         this.freePrinters = new ArrayList<>();
         this.spoolManager = spoolManager;
 
-        var printerJsonLoader = new PrinterJsonLoader(filename, this);
-        printerJsonLoader.loadFile();
-
+        new PrinterJsonLoader(Constants.PRINTERS_FILENAME, this)
+                .loadFile();
     }
 
     public void addPrinter(
@@ -57,10 +58,10 @@ public class PrinterManager {
 
 
         for(Spool spool: cspools) {
-            spoolManager.getFreeSpools().remove(spool);
+            this.spoolManager.getFreeSpools().remove(spool);
         }
-        printers.add(printer);
-        freePrinters.add(printer);
+        this.printers.add(printer);
+        this.freePrinters.add(printer);
     }
 
     public List<Printer> getPrinters() {

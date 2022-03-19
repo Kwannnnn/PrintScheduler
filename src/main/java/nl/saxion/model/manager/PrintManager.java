@@ -1,6 +1,7 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.manager;
 
-import nl.saxion.io.PrintJsonLoader;
+import nl.saxion.model.Constants;
+import nl.saxion.model.io.PrintJsonLoader;
 import nl.saxion.model.Print;
 import org.json.simple.parser.ParseException;
 
@@ -11,11 +12,11 @@ import java.util.List;
 public class PrintManager {
     private final List<Print> prints;
 
-    public PrintManager(String filename) throws IOException, ParseException {
+    public PrintManager() throws IOException, ParseException {
         this.prints = new ArrayList<>();
 
-        var printJsonLoader = new PrintJsonLoader(filename, this);
-        printJsonLoader.loadFile();
+        new PrintJsonLoader(Constants.PRINTS_FILENAME, this)
+                .loadFile();
     }
 
     public void addPrint(String name, String filename, int height, int width, int length, ArrayList<Integer> filamentLength) {

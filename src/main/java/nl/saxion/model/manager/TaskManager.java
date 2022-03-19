@@ -1,8 +1,9 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.manager;
 
 import nl.saxion.model.FilamentType;
 import nl.saxion.model.Print;
 import nl.saxion.model.PrintTask;
+import nl.saxion.model.Printer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

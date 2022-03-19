@@ -1,4 +1,4 @@
-package nl.saxion.io;
+package nl.saxion.model.io;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

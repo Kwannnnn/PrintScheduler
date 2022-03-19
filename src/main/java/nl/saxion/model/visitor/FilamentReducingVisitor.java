@@ -1,7 +1,6 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.visitor;
 
-import nl.saxion.model.PrintTask;
-import nl.saxion.model.Spool;
+import nl.saxion.model.*;
 
 public class FilamentReducingVisitor implements PrinterVisitor {
     private final PrintTask printTask;

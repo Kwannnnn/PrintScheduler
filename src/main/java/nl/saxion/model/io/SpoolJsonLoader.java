@@ -1,8 +1,8 @@
-package nl.saxion.io;
+package nl.saxion.model.io;
 
 import nl.saxion.model.FilamentType;
 import nl.saxion.model.Spool;
-import nl.saxion.model.newModel.SpoolManager;
+import nl.saxion.model.manager.SpoolManager;
 import org.json.simple.JSONObject;
 
 public class SpoolJsonLoader extends JsonLoader<Spool> {

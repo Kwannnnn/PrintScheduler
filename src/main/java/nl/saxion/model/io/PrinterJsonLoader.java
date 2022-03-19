@@ -1,7 +1,7 @@
-package nl.saxion.io;
+package nl.saxion.model.io;
 
 import nl.saxion.model.Printer;
-import nl.saxion.model.newModel.PrinterManager;
+import nl.saxion.model.manager.PrinterManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

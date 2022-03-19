@@ -1,4 +1,4 @@
-package nl.saxion.model.newModel;
+package nl.saxion.model.visitor;
 
 import nl.saxion.model.*;
 
