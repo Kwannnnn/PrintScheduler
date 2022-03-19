@@ -12,14 +12,14 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
     private final ArrayList<PrintTask> pendingPrintTasks;
     private final HashMap<Printer, PrintTask> runningPrintTasks;
     private final ArrayList<Printer> freePrinters;
-    private final ArrayList<Spool> freeSpools;
+    private final List<Spool> freeSpools;
     private final PropertyChangeSupport support;
     private PrintTask chosenPrintTask;
 
     public SpoolSwitchingVisitor(ArrayList<PrintTask> pendingPrintTasks,
                                  HashMap<Printer, PrintTask> runningPrintTasks,
                                  ArrayList<Printer> freePrinters,
-                                 ArrayList<Spool> freeSpools,
+                                 List<Spool> freeSpools,
                                  PropertyChangeSupport support) {
         this.pendingPrintTasks = pendingPrintTasks;
         this.runningPrintTasks = runningPrintTasks;

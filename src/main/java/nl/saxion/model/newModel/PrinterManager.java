@@ -15,26 +15,25 @@ import java.util.*;
 
 public class PrinterManager {
     private final PropertyChangeSupport propertyChangeSupport;
-    private final List<Print> prints;
-    private final List<Spool> spools;
+    private final PrintManager printManager;
+    private final SpoolManager spoolManager;
     private final List<Printer> printers;
-    private ArrayList<Spool> freeSpools = new ArrayList<>(); // TODO: Decide if this should be used at all.
     private ArrayList<Printer> freePrinters = new ArrayList<>();
     private ArrayList<PrintTask> pendingPrintTasks = new ArrayList<>();
     private HashMap<Printer, PrintTask> runningPrintTasks = new HashMap<>();
 
     public PrinterManager() {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
-        this.spools = new ArrayList<>();
         this.printers = new ArrayList<>();
-        this.prints = new ArrayList<>();
+        this.printManager = new PrintManager();
+        this.spoolManager = new SpoolManager();
         readPrintsFromFile();
         readSpoolsFromFile();
         readPrintersFromFile();
     }
 
     public void addPrintTask(int printId, List<String> colors, int type) {
-        Print print = findPrintById(printId);
+        Print print = this.printManager.findPrintById(printId);
         if (print == null) {
             // TODO: printId ???
             fireAnError("Could not find print with name " + printId);
@@ -48,7 +47,7 @@ public class PrinterManager {
 
         for (String color : colors) {
             boolean found = false;
-            for (Spool spool : this.spools) {
+            for (Spool spool : this.spoolManager.getSpools()) {
                 if (spool.getColor().equals(color) && spool.getFilamentType().getId() == type) {
                     found = true;
                     break;
@@ -90,7 +89,7 @@ public class PrinterManager {
                     this.pendingPrintTasks,
                     this.runningPrintTasks,
                     this.freePrinters,
-                    this.freeSpools,
+                    this.spoolManager.getFreeSpools(),
                     this.propertyChangeSupport);
             printer.accept(spoolSwitchingVisitor);
             chosenTask = spoolSwitchingVisitor.getChosenPrintTask();
@@ -135,7 +134,7 @@ public class PrinterManager {
         // TODO: PrinterFactory printerFactory = new PrinterFactory();
         ArrayList<Spool> cspools = new ArrayList<>();
         for (var spool : currentSpools) {
-            cspools.add(getSpoolByID(((Long) spool).intValue()));
+            cspools.add(this.spoolManager.getSpoolByID(((Long) spool).intValue()));
         }
 
         Printer printer;
@@ -174,30 +173,10 @@ public class PrinterManager {
         }
 
         for(Spool spool: cspools) {
-            freeSpools.remove(spool);
+            this.spoolManager.getFreeSpools().remove(spool);
         }
         printers.add(printer);
         freePrinters.add(printer);
-    }
-
-    public Spool getSpoolByID(int id) {
-        for(Spool s: spools) {
-            if(s.getId() == id) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    public void addPrint(String name, String filename, int height, int width, int length, ArrayList<Integer> filamentLength) {
-        Print p = new Print(name, filename, height, width, length, filamentLength);
-        prints.add(p);
-    }
-
-
-    public void addSpool(Spool spool) {
-        spools.add(spool);
-        freeSpools.add(spool);
     }
 
     private void readSpoolsFromFile() {
@@ -230,7 +209,7 @@ public class PrinterManager {
                         System.out.println("Not a valid filamentType, bailing out");
                         return;
                 }
-                addSpool(new Spool(id, color, type, length));
+                this.spoolManager.addSpool(id, color, type, length);
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -260,7 +239,7 @@ public class PrinterManager {
                 for(int i = 0; i < fLength.size(); i++) {
                     filamentLength.add(((Long)fLength.get(i)).intValue());
                 }
-                this.addPrint(name, filename, height, width, length, filamentLength);
+                this.printManager.addPrint(name, filename, height, width, length, filamentLength);
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -367,14 +346,6 @@ public class PrinterManager {
         );
     }
 
-
-    public Print findPrintById(int index) {
-        if (index > this.prints.size() -1) {
-            return null;
-        }
-        return this.prints.get(index);
-    }
-
     public void addListener(PropertyChangeListener listener) {
         this.propertyChangeSupport.addPropertyChangeListener(listener);
     }
@@ -386,19 +357,19 @@ public class PrinterManager {
     }
 
     public List<String> getPrintNames() {
-        return this.prints.stream()
+        return this.printManager.getPrints().stream()
                 .map(Print::getName)
                 .toList();
     }
 
     public List<String> getPrints() {
-        return this.prints.stream()
+        return this.printManager.getPrints().stream()
                 .map(Print::toString)
                 .toList();
     }
 
     public List<String> getSpools() {
-        return this.spools.stream()
+        return this.spoolManager.getSpools().stream()
                 .map(Spool::toString)
                 .toList();
     }
@@ -420,7 +391,7 @@ public class PrinterManager {
     }
 
     public int getPrintColorsSize(int printChoice) {
-        return prints.get(printChoice).getFilamentLength().size();
+        return this.printManager.getPrints().get(printChoice).getFilamentLength().size();
     }
 
     public List<String> getAvailableColors(int filamentChoice) {
@@ -432,7 +403,7 @@ public class PrinterManager {
 
         assert filamentType != null;
 
-        return spools.stream()
+        return this.spoolManager.getSpools().stream()
                 .filter(s -> s.getFilamentType() == filamentType)
                 .map(Spool::getColor)
                 .distinct()
