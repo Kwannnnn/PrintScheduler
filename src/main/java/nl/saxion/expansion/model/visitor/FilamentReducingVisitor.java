@@ -5,6 +5,10 @@ import nl.saxion.expansion.model.PrintTask;
 import nl.saxion.expansion.model.SLAPrinter;
 import nl.saxion.expansion.model.Spool;
 
+/**
+ * A visitor that reduces the remaining filament of a Printer
+ * based on the length required by the print task.
+ */
 public class FilamentReducingVisitor implements PrinterVisitor {
     private final PrintTask printTask;
 

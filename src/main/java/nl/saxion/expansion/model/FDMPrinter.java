@@ -39,6 +39,10 @@ public class FDMPrinter implements Printer {
         return this.supportedFilaments;
     }
 
+    public boolean supportsFilament(FilamentType filamentType) {
+        return this.supportedFilaments.contains(filamentType);
+    }
+
     public void setSpools(List<Spool> spools) {
         for (int i = 0; i < spools.size() && i < this.maxSpools; i++) {
             this.spools[i] = spools.get(i);

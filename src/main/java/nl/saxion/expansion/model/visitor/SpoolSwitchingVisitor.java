@@ -31,6 +31,7 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
 
     @Override
     public void visit(FDMPrinter fdmPrinter) {
+        this.chosenPrintTask = null;
         // If we didn't find a print for the current spool we search for a print with the free spools.
         for(PrintTask printTask : pendingPrintTasks) {
             // FIXME: There was a bug with the original code

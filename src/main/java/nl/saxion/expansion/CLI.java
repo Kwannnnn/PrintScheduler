@@ -107,7 +107,11 @@ public class CLI implements PropertyChangeListener {
     }
 
     private void changePrintingStyle() {
-
+        showCurrentPrintStrategy();
+        showPrintStrategies();
+        System.out.println("Choose strategy: ");
+        int chosenStrategy = numberInputBetweenBounds(1, 2);
+        this.printerSystemController.changePrintingStyle(chosenStrategy);
     }
 
 
@@ -115,6 +119,17 @@ public class CLI implements PropertyChangeListener {
         this.printerSystemController.startPrintQueue();
     }
 
+    private void showCurrentPrintStrategy() {
+        System.out.println("Current strategy: " +
+                this.model.getCurrentPrintingStrategy());
+    }
+
+    private void showPrintStrategies() {
+        List<String> printingStrategies = this.model.getPrintingStrategies();
+        for (int i = 0; i < printingStrategies.size(); i++) {
+            System.out.println(i+1 + ": " + printingStrategies.get(i));
+        }
+    }
 
     private void showPendingPrintTasks() {
         List<String> printTasks = this.model.getPendingPrintTasks();

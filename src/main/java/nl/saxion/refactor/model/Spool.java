@@ -5,12 +5,14 @@ public class Spool {
     private final String color;
     private final FilamentType filamentType;
     private double length;
+    private boolean isFree;
 
     public Spool(int id, String color, FilamentType filamentType, double length) {
         this.id = id;
         this.color = color;
         this.filamentType = filamentType;
         this.length = length;
+        this.isFree = true;
     }
 
     public int getId() {
@@ -39,6 +41,14 @@ public class Spool {
             success = false;
         }
         return success;
+    }
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean free) {
+        isFree = free;
     }
 
     public String getColor() {

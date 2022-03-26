@@ -17,7 +17,6 @@ public class PrinterManager {
     private final List<Printer> freePrinters;
     private final SpoolManager spoolManager;
 
-
     public PrinterManager(SpoolManager spoolManager) throws IOException, ParseException {
         this.printers = new ArrayList<>();
         this.freePrinters = new ArrayList<>();

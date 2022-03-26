@@ -4,9 +4,10 @@ import nl.saxion.expansion.model.manager.PrintManager;
 import nl.saxion.expansion.model.manager.PrinterManager;
 import nl.saxion.expansion.model.manager.SpoolManager;
 import nl.saxion.expansion.model.manager.TaskManager;
-import nl.saxion.expansion.model.visitor.ChooseTaskVisitor;
-import nl.saxion.expansion.model.visitor.FilamentReducingVisitor;
-import nl.saxion.expansion.model.visitor.SpoolSwitchingVisitor;
+import nl.saxion.expansion.model.strategy.EfficientSpoolUsageStrategy;
+import nl.saxion.expansion.model.strategy.LessSpoolChangeStrategy;
+import nl.saxion.expansion.model.strategy.PrintingStrategy;
+import nl.saxion.expansion.model.visitor.*;
 import org.json.simple.parser.ParseException;
 
 import java.beans.PropertyChangeListener;
@@ -20,6 +21,8 @@ public class SystemFacade {
     private final SpoolManager spoolManager;
     private final PrinterManager printerManager;
     private final TaskManager taskManager;
+    private final List<PrintingStrategy> printingStrategies;
+    private PrintingStrategy printingStrategy;
 
     public SystemFacade() throws IOException, ParseException {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
@@ -27,10 +30,19 @@ public class SystemFacade {
         this.spoolManager = new SpoolManager();
         this.printerManager = new PrinterManager(this.spoolManager);
         this.taskManager = new TaskManager();
+        this.printingStrategies = List.of(getLessSpoolStrategy(), getEfficientSpoolUsage());
+        this.printingStrategy = printingStrategies.get(0);
     }
 
     public void addListener(PropertyChangeListener listener) {
         this.propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void setPrintingStrategy(int printingStrategy) {
+        switch (printingStrategy) {
+            case 1 -> this.printingStrategy = this.printingStrategies.get(0);
+            case 2 -> this.printingStrategy = this.printingStrategies.get(1);
+        }
     }
 
     public void addPrintTask(int printId, List<String> colors, int type) {
@@ -214,8 +226,7 @@ public class SystemFacade {
 
     private void selectPrintTask(Printer printer) {
         Optional<PrintTask> chosenTaskOptional =
-                chooseTaskUsingCurrentSpools(printer)
-                        .or(() -> chooseTaskUsingFreeSpools(printer));
+                this.printingStrategy.choosePrintTask(printer);
 
         if (chosenTaskOptional.isPresent()) {
             PrintTask chosenTask = chosenTaskOptional.get();
@@ -224,26 +235,34 @@ public class SystemFacade {
         }
     }
 
-    private Optional<PrintTask> chooseTaskUsingCurrentSpools(Printer printer) {
+    private PrintingStrategy getLessSpoolStrategy() {
         ChooseTaskVisitor chooseTaskVisitor = new ChooseTaskVisitor(
                 this.taskManager.getPendingPrintTasks(),
                 this.taskManager.getRunningPrintTasks(),
-                this.printerManager.getFreePrinters());
-        printer.accept(chooseTaskVisitor);
+                this.printerManager.getFreePrinters()
+        );
 
-        return chooseTaskVisitor.getChosenPrintTask();
-    }
-
-    private Optional<PrintTask> chooseTaskUsingFreeSpools(Printer printer) {
         SpoolSwitchingVisitor spoolSwitchingVisitor = new SpoolSwitchingVisitor(
                 this.taskManager.getPendingPrintTasks(),
                 this.taskManager.getRunningPrintTasks(),
                 this.printerManager.getFreePrinters(),
                 this.spoolManager.getFreeSpools(),
-                this.propertyChangeSupport);
-        printer.accept(spoolSwitchingVisitor);
+                this.propertyChangeSupport
+        );
 
-        return spoolSwitchingVisitor.getChosenPrintTask();
+        return new LessSpoolChangeStrategy(chooseTaskVisitor, spoolSwitchingVisitor);
+    }
+
+    private PrintingStrategy getEfficientSpoolUsage() {
+        EfficientSpoolVisitor efficientSpoolVisitor = new EfficientSpoolVisitor(
+                this.propertyChangeSupport,
+                this.taskManager.getPendingPrintTasks(),
+                this.taskManager.getRunningPrintTasks(),
+                this.printerManager.getFreePrinters(),
+                this.spoolManager.getSpools(),
+                this.spoolManager.getFreeSpools()
+        );
+        return new EfficientSpoolUsageStrategy(efficientSpoolVisitor);
     }
 
     private void fireAnError(String message) {
@@ -260,5 +279,15 @@ public class SystemFacade {
                 "",
                 message
         );
+    }
+
+    public String getCurrentPrintingStrategy() {
+        return this.printingStrategy.toString();
+    }
+
+    public List<String> getPrintingStrategies() {
+        return printingStrategies.stream()
+                .map(PrintingStrategy::toString)
+                .toList();
     }
 }

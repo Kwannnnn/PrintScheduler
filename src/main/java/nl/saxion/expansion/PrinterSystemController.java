@@ -16,6 +16,10 @@ public class PrinterSystemController {
         this.model.addPrintTask(printChoice, chosenColors, filamentChoice);
     }
 
+    public void changePrintingStyle(int printStyle) {
+        this.model.setPrintingStrategy(printStyle);
+    }
+
     public void startPrintQueue() {
         this.model.startInitialQueue();
     }
