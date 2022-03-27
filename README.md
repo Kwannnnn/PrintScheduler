@@ -6,3 +6,5 @@ Its purpose is to illustrate the workings of the proposed architecture by simula
 
 Running the application can simply be done by executing the ***main*** method inside the ***Main*** class, after which the
 simulation output will be printed on the console.
+
+Different requests can be sent by modifying the ***message*** parameter when initializing a new **Request**.
