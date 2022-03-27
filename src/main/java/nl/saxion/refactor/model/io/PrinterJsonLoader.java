@@ -1,20 +1,17 @@
 package nl.saxion.refactor.model.io;
 
-import nl.saxion.refactor.model.Printer;
-import nl.saxion.refactor.model.manager.PrinterManager;
+import nl.saxion.refactor.model.io.record.PrinterFileRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class PrinterJsonLoader extends JsonLoader<Printer> {
-    private final PrinterManager printerManager;
+public class PrinterJsonLoader extends AbstractJsonLoader<PrinterFileRecord> {
 
-    public PrinterJsonLoader(String filename, PrinterManager printerManager) {
+    public PrinterJsonLoader(String filename) {
         super(filename);
-        this.printerManager = printerManager;
     }
 
     @Override
-    protected void parseObject(JSONObject o) {
+    protected PrinterFileRecord parseObject(JSONObject o) {
         int id = ((Long) o.get("id")).intValue();
         int type = ((Long) o.get("type")).intValue();
         String name = (String) o.get("name");
@@ -25,6 +22,6 @@ public class PrinterJsonLoader extends JsonLoader<Printer> {
         int maxColors = ((Long) o.get("maxColors")).intValue();
         JSONArray currentSpools = (JSONArray) o.get("currentSpools");
 
-        this.printerManager.addPrinter(id, type, name, manufacturer, maxX, maxY, maxZ, maxColors, currentSpools);
+        return new PrinterFileRecord(id, type, name, manufacturer, maxX, maxY, maxZ, maxColors, currentSpools);
     }
 }

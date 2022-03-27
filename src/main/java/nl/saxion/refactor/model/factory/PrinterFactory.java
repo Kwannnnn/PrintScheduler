@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrinterFactory {
-    public Printer createPrinter(int id, int printerType, String printerName, String manufacturer, int maxX, int maxY, int maxZ, int maxColors, ArrayList<Spool> cspools) {
+    public Printer createPrinter(int id, int printerType, String printerName, String manufacturer, int maxX, int maxY, int maxZ, int maxColors, List<Spool> cspools) {
         Printer printer;
         switch (printerType) {
             case 1, 3 -> {

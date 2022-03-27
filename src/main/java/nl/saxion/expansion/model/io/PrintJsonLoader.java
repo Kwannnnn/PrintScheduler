@@ -1,34 +1,24 @@
 package nl.saxion.expansion.model.io;
 
-import nl.saxion.expansion.model.Print;
-import nl.saxion.expansion.model.manager.PrintManager;
+import nl.saxion.expansion.model.io.record.PrintFileRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
+public class PrintJsonLoader extends AbstractJsonLoader<PrintFileRecord> {
 
-public class PrintJsonLoader extends JsonLoader {
-    PrintManager printManager;
-
-    public PrintJsonLoader(String filename, PrintManager printManager) {
+    public PrintJsonLoader(String filename) {
         super(filename);
-        this.printManager = printManager;
     }
 
     @Override
-    protected void parseObject(JSONObject o) {
+    protected PrintFileRecord parseObject(JSONObject o) {
         String name = (String) o.get("name");
         String filename = (String) o.get("filename");
         int height = ((Long) o.get("height")).intValue();
         int width = ((Long) o.get("width")).intValue();
         int length = ((Long) o.get("length")).intValue();
-        //int filamentLength = ((Long) print.get("filamentLength")).intValue();
         JSONArray fLength = (JSONArray) o.get("filamentLength");
-        ArrayList<Integer> filamentLength = new ArrayList<>();
-        for (var value : fLength) {
-            filamentLength.add(((Long) value).intValue());
-        }
 
-        this.printManager.addPrint(name, filename, height, width, length, filamentLength);
+        return new PrintFileRecord(name, filename, height, width, length, fLength);
     }
 }

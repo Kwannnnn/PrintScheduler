@@ -1,6 +1,10 @@
 package nl.saxion.expansion.model;
 
 import nl.saxion.expansion.exception.ValidationException;
+import nl.saxion.expansion.model.io.FileLoader;
+import nl.saxion.expansion.model.io.record.PrintFileRecord;
+import nl.saxion.expansion.model.io.record.PrinterFileRecord;
+import nl.saxion.expansion.model.io.record.SpoolFileRecord;
 import nl.saxion.expansion.model.manager.PrintManager;
 import nl.saxion.expansion.model.manager.PrinterManager;
 import nl.saxion.expansion.model.manager.SpoolManager;
@@ -25,11 +29,14 @@ public class SystemFacade {
     private final List<PrintingStrategy> printingStrategies;
     private PrintingStrategy printingStrategy;
 
-    public SystemFacade() throws IOException, ParseException {
+    public SystemFacade(FileLoader<PrintFileRecord> printLoader,
+                        FileLoader<SpoolFileRecord> spoolLoader,
+                        FileLoader<PrinterFileRecord> printerLoader)
+            throws IOException, ParseException {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
-        this.printManager = new PrintManager();
-        this.spoolManager = new SpoolManager();
-        this.printerManager = new PrinterManager(this.spoolManager);
+        this.printManager = new PrintManager(printLoader);
+        this.spoolManager = new SpoolManager(spoolLoader);
+        this.printerManager = new PrinterManager(printerLoader, this.spoolManager);
         this.taskManager = new TaskManager();
         this.printingStrategies = List.of(getLessSpoolStrategy(), getEfficientSpoolUsage());
         this.printingStrategy = printingStrategies.get(0);

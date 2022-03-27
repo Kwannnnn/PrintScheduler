@@ -1,8 +1,8 @@
 package nl.saxion.refactor.model.manager;
 
-import nl.saxion.refactor.model.Constants;
 import nl.saxion.refactor.model.Print;
-import nl.saxion.refactor.model.io.PrintJsonLoader;
+import nl.saxion.refactor.model.io.FileLoader;
+import nl.saxion.refactor.model.io.record.PrintFileRecord;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -13,14 +13,14 @@ import java.util.Optional;
 public class PrintManager {
     private final List<Print> prints;
 
-    public PrintManager() throws IOException, ParseException {
+    public PrintManager(FileLoader<PrintFileRecord> fileLoader)
+            throws IOException, ParseException {
         this.prints = new ArrayList<>();
 
-        new PrintJsonLoader(Constants.PRINTS_FILENAME, this)
-                .loadFile();
+        loadPrintsFromRecords(fileLoader.loadFile());
     }
 
-    public void addPrint(String name, String filename, int height, int width, int length, ArrayList<Integer> filamentLength) {
+    public void addPrint(String name, String filename, int height, int width, int length, List<Integer> filamentLength) {
         Print p = new Print(name, filename, height, width, length, filamentLength);
         this.prints.add(p);
     }
@@ -34,5 +34,22 @@ public class PrintManager {
             return Optional.empty();
         }
         return Optional.of(this.prints.get(index));
+    }
+
+    private void loadPrintsFromRecords(List<PrintFileRecord> records) {
+        for (PrintFileRecord record : records) {
+            List<Integer> filamentLength = new ArrayList<>();
+            for (var value : record.filamentLength()) {
+                filamentLength.add(((Long) value).intValue());
+            }
+
+            this.addPrint(
+                    record.name(),
+                    record.filename(),
+                    record.height(),
+                    record.width(),
+                    record.length(),
+                    filamentLength);
+        }
     }
 }

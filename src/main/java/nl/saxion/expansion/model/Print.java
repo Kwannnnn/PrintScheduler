@@ -1,6 +1,6 @@
 package nl.saxion.expansion.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Print {
     private final String name;
@@ -8,9 +8,9 @@ public class Print {
     private final int height;
     private final int width;
     private final int length;
-    private final ArrayList<Integer> filamentLength;
+    private final List<Integer> filamentLength;
 
-    public Print(String name, String filename, int height, int width, int length, ArrayList<Integer> filamentLength) {
+    public Print(String name, String filename, int height, int width, int length, List<Integer> filamentLength) {
         this.name = name;
         this.filename = filename;
         this.height = height;
@@ -45,7 +45,7 @@ public class Print {
         return width;
     }
 
-    public ArrayList<Integer> getFilamentLength() {
+    public List<Integer> getFilamentLength() {
         return filamentLength;
     }
 }

@@ -1,9 +1,9 @@
 package nl.saxion.refactor.model.manager;
 
-import nl.saxion.refactor.model.Constants;
 import nl.saxion.refactor.model.FilamentType;
 import nl.saxion.refactor.model.Spool;
-import nl.saxion.refactor.model.io.SpoolJsonLoader;
+import nl.saxion.refactor.model.io.FileLoader;
+import nl.saxion.refactor.model.io.record.SpoolFileRecord;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -12,14 +12,14 @@ import java.util.List;
 
 public class SpoolManager {
     private final List<Spool> spools;
-    private final List<Spool> freeSpools; // TODO: Decide if this should be used at all.
+    private final List<Spool> freeSpools;
 
-    public SpoolManager() throws IOException, ParseException {
+    public SpoolManager(FileLoader<SpoolFileRecord> fileLoader)
+            throws IOException, ParseException {
         this.freeSpools = new ArrayList<>();
         this.spools = new ArrayList<>();
 
-        new SpoolJsonLoader(Constants.SPOOLS_FILENAME, this)
-                .loadFile();
+        this.loadSpoolsFromRecords(fileLoader.loadFile());
     }
 
     public void addSpool(int id, String color, FilamentType filamentType, double length) {
@@ -43,5 +43,18 @@ public class SpoolManager {
             }
         }
         return null;
+    }
+
+    private void loadSpoolsFromRecords(List<SpoolFileRecord> records) {
+        for (SpoolFileRecord record : records) {
+            FilamentType type = switch (record.filamentName()) {
+                case "PLA" -> FilamentType.PLA;
+                case "PETG" -> FilamentType.PETG;
+                case "ABS" -> FilamentType.ABS;
+                default -> throw new IllegalArgumentException("Not a valid filamentType! Spool with id " + record.id() + " not loaded.");
+            };
+
+            this.addSpool(record.id(), record.color(), type, record.length());
+        }
     }
 }

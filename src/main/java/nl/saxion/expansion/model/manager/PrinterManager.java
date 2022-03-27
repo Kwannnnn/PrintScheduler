@@ -1,11 +1,10 @@
 package nl.saxion.expansion.model.manager;
 
-import nl.saxion.expansion.model.Constants;
 import nl.saxion.expansion.model.Printer;
 import nl.saxion.expansion.model.Spool;
 import nl.saxion.expansion.model.factory.PrinterFactory;
-import nl.saxion.expansion.model.io.PrinterJsonLoader;
-import org.json.simple.JSONArray;
+import nl.saxion.expansion.model.io.FileLoader;
+import nl.saxion.expansion.model.io.record.PrinterFileRecord;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -18,34 +17,25 @@ public class PrinterManager {
     private final List<Printer> freePrinters;
     private final SpoolManager spoolManager;
 
-
-    public PrinterManager(SpoolManager spoolManager) throws IOException, ParseException {
+    public PrinterManager(FileLoader<PrinterFileRecord> fileLoader,
+                          SpoolManager spoolManager)
+            throws IOException, ParseException {
         this.printers = new ArrayList<>();
         this.freePrinters = new ArrayList<>();
         this.spoolManager = spoolManager;
 
-        new PrinterJsonLoader(Constants.PRINTERS_FILENAME, this)
-                .loadFile();
+        loadPrintersFromRecords(fileLoader.loadFile());
     }
 
-    public void addPrinter(
-            int id,
-            int printerType,
-            String printerName,
-            String manufacturer,
-            int maxX,
-            int maxY,
-            int maxZ,
-            int maxColors,
-            JSONArray currentSpools) {
-
-        ArrayList<Spool> cspools = new ArrayList<>();
-        for (var spool : currentSpools) {
-            var spoolId = ((Long) spool).intValue();
-            if (spoolId > 0) {
-                cspools.add(spoolManager.getSpoolByID(((Long) spool).intValue()));
-            }
-        }
+    private void addPrinter(int id,
+                            int printerType,
+                            String printerName,
+                            String manufacturer,
+                            int maxX,
+                            int maxY,
+                            int maxZ,
+                            int maxColors,
+                            List<Spool> currentSpools) {
 
         PrinterFactory printerFactory = new PrinterFactory();
 
@@ -58,10 +48,10 @@ public class PrinterManager {
                 maxY,
                 maxZ,
                 maxColors,
-                cspools);
+                currentSpools);
 
 
-        for(Spool spool: cspools) {
+        for(Spool spool : currentSpools) {
             this.spoolManager.getFreeSpools().remove(spool);
         }
         this.printers.add(printer);
@@ -81,5 +71,29 @@ public class PrinterManager {
                 .stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
+    }
+
+    private void loadPrintersFromRecords(List<PrinterFileRecord> records) {
+        for (PrinterFileRecord record : records) {
+            List<Spool> currentSpools = new ArrayList<>();
+            for (var spool : record.currentSpools()) {
+                var spoolId = ((Long) spool).intValue();
+                if (spoolId > 0) {
+                    currentSpools.add(this.spoolManager.getSpoolByID(((Long) spool).intValue()));
+                }
+            }
+
+            this.addPrinter(
+                    record.id(),
+                    record.type(),
+                    record.printerName(),
+                    record.manufacturer(),
+                    record.maxX(),
+                    record.maxY(),
+                    record.maxZ(),
+                    record.maxColors(),
+                    currentSpools
+            );
+        }
     }
 }

@@ -9,25 +9,30 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class JsonLoader implements FileLoader {
+public abstract class AbstractJsonLoader<T> implements FileLoader<T> {
     private final String filename;
 
-    public JsonLoader(String filename) {
+    public AbstractJsonLoader(String filename) {
         this.filename = filename;
     }
 
     @Override
-    public void loadFile() throws IOException, ParseException {
+    public List<T> loadFile() throws IOException, ParseException {
         var jsonParser = new JSONParser();
         var reader = new FileReader(getResourceFile());
         var jsonData = (JSONArray) jsonParser.parse(reader);
+        List<T> result = new ArrayList<>();
         for (var line : jsonData) {
-            parseObject((JSONObject) line);
+            result.add(parseObject((JSONObject) line));
         }
+
+        return result;
     }
 
-    protected abstract void parseObject(JSONObject o);
+    protected abstract T parseObject(JSONObject o);
 
     private String getResourceFile() throws FileNotFoundException {
         URL printResource = getClass().getResource("/" + this.filename);

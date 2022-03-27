@@ -1,6 +1,10 @@
 package nl.saxion.refactor.model;
 
 import nl.saxion.refactor.exception.ValidationException;
+import nl.saxion.refactor.model.io.FileLoader;
+import nl.saxion.refactor.model.io.record.PrintFileRecord;
+import nl.saxion.refactor.model.io.record.PrinterFileRecord;
+import nl.saxion.refactor.model.io.record.SpoolFileRecord;
 import nl.saxion.refactor.model.manager.PrintManager;
 import nl.saxion.refactor.model.manager.PrinterManager;
 import nl.saxion.refactor.model.manager.SpoolManager;
@@ -22,11 +26,14 @@ public class SystemFacade {
     private final PrinterManager printerManager;
     private final TaskManager taskManager;
 
-    public SystemFacade() throws IOException, ParseException {
+    public SystemFacade(FileLoader<PrintFileRecord> printFileLoader,
+                        FileLoader<SpoolFileRecord> spoolFileLoader,
+                        FileLoader<PrinterFileRecord> printerFileLoader)
+            throws IOException, ParseException {
         this.propertyChangeSupport = new PropertyChangeSupport(this);
-        this.printManager = new PrintManager();
-        this.spoolManager = new SpoolManager();
-        this.printerManager = new PrinterManager(this.spoolManager);
+        this.printManager = new PrintManager(printFileLoader);
+        this.spoolManager = new SpoolManager(spoolFileLoader);
+        this.printerManager = new PrinterManager(printerFileLoader, this.spoolManager);
         this.taskManager = new TaskManager();
     }
 

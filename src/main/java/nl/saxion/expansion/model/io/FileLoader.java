@@ -3,7 +3,8 @@ package nl.saxion.expansion.model.io;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.List;
 
-public interface FileLoader {
-    void loadFile() throws IOException, ParseException;
+public interface FileLoader<T> {
+    List<T> loadFile() throws IOException, ParseException;
 }
