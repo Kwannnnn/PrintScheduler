@@ -2,21 +2,22 @@ package nl.saxion.expansion.model.io;
 
 import nl.saxion.expansion.model.FilamentType;
 import nl.saxion.expansion.model.manager.SpoolManager;
-import org.json.simple.JSONObject;
 
-public class SpoolJsonLoader extends JsonLoader {
+public class SpoolCsvLoader extends AbstractCsvLoader {
     private SpoolManager spoolManager;
-    public SpoolJsonLoader(String filename, SpoolManager spoolManager) {
+
+    public SpoolCsvLoader(String filename, SpoolManager spoolManager) {
         super(filename);
         this.spoolManager = spoolManager;
     }
 
     @Override
-    protected void parseObject(JSONObject o) {
-        int id = ((Long) o.get("id")).intValue();
-        String color = (String) o.get("color");
-        String filamentType = (String) o.get("filamentType");
-        double length = (Double) o.get("length");
+    protected void parseObject(String[] args) {
+        int id = Integer.parseInt(args[0]);
+        String name = args[1];
+        String filamentType = args[2];
+        double length = Double.parseDouble(args[3]);
+
         FilamentType type = switch (filamentType) {
             case "PLA" -> FilamentType.PLA;
             case "PETG" -> FilamentType.PETG;
@@ -24,6 +25,8 @@ public class SpoolJsonLoader extends JsonLoader {
             default -> throw new IllegalArgumentException("Not a valid filamentType! Spool with id " + id + " not loaded.");
         };
 
-        this.spoolManager.addSpool(id, color, type, length);
+        this.spoolManager.addSpool(
+                id, name, type, length
+        );
     }
 }

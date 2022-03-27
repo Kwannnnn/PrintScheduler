@@ -5,7 +5,7 @@ import nl.saxion.expansion.model.manager.PrinterManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class PrinterJsonLoader extends JsonLoader<Printer> {
+public class PrinterJsonLoader extends JsonLoader {
     private final PrinterManager printerManager;
 
     public PrinterJsonLoader(String filename, PrinterManager printerManager) {

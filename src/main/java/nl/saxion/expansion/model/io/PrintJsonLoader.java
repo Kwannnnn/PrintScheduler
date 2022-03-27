@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 
-public class PrintJsonLoader extends JsonLoader<Print> {
+public class PrintJsonLoader extends JsonLoader {
     PrintManager printManager;
 
     public PrintJsonLoader(String filename, PrintManager printManager) {

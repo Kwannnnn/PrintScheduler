@@ -3,6 +3,7 @@ package nl.saxion.expansion.model.manager;
 import nl.saxion.expansion.model.Constants;
 import nl.saxion.expansion.model.FilamentType;
 import nl.saxion.expansion.model.Spool;
+import nl.saxion.expansion.model.io.SpoolCsvLoader;
 import nl.saxion.expansion.model.io.SpoolJsonLoader;
 import org.json.simple.parser.ParseException;
 
@@ -18,7 +19,7 @@ public class SpoolManager {
         this.freeSpools = new ArrayList<>();
         this.spools = new ArrayList<>();
 
-        new SpoolJsonLoader(Constants.SPOOLS_FILENAME, this)
+        new SpoolCsvLoader(Constants.SPOOLS_FILENAME, this)
                 .loadFile();
     }
 
