@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PrintManager {
     private final List<Print> prints;
@@ -28,10 +29,10 @@ public class PrintManager {
         return this.prints;
     }
 
-    public Print findPrintById(int index) {
+    public Optional<Print> findPrintById(int index) {
         if (index > this.prints.size() -1) {
-            return null;
+            return Optional.empty();
         }
-        return this.prints.get(index);
+        return Optional.of(this.prints.get(index));
     }
 }

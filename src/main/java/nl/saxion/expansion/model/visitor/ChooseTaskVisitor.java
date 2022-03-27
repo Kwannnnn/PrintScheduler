@@ -12,12 +12,12 @@ import java.util.Optional;
  */
 public class ChooseTaskVisitor implements PrinterVisitor {
     private final List<PrintTask> pendingPrintTasks;
-    private final HashMap<Printer, PrintTask> runningPrintTasks;
+    private final HashMap<Long, PrintTask> runningPrintTasks;
     private final List<Printer> freePrinters;
     private PrintTask chosenPrintTask;
 
     public ChooseTaskVisitor(List<PrintTask> pendingPrintTasks,
-                             HashMap<Printer, PrintTask> runningPrintTasks,
+                             HashMap<Long, PrintTask> runningPrintTasks,
                              List<Printer> freePrinters) {
         this.pendingPrintTasks = pendingPrintTasks;
         this.runningPrintTasks = runningPrintTasks;
@@ -44,7 +44,7 @@ public class ChooseTaskVisitor implements PrinterVisitor {
 
             if (fdmPrinterCanPrint(fdmPrinter, printTask)) {
                 // Change the status of the task to running
-                this.runningPrintTasks.put(fdmPrinter, printTask);
+                this.runningPrintTasks.put(fdmPrinter.getId(), printTask);
                 // Change the status of the printer to busy
                 this.freePrinters.remove(fdmPrinter);
 

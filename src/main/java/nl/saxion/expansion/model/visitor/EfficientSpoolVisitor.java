@@ -8,7 +8,7 @@ import java.util.*;
 public class EfficientSpoolVisitor implements PrinterVisitor {
     private final PropertyChangeSupport support;
     private final List<PrintTask> pendingPrintTasks;
-    private final HashMap<Printer, PrintTask> runningPrintTasks;
+    private final HashMap<Long, PrintTask> runningPrintTasks;
     private final List<Printer> freePrinters;
     private final List<Spool> spools;
     private final List<Spool> freeSpools;
@@ -16,7 +16,7 @@ public class EfficientSpoolVisitor implements PrinterVisitor {
 
     public EfficientSpoolVisitor(PropertyChangeSupport propertyChangeSupport,
                                  List<PrintTask> pendingPrintTasks,
-                                 HashMap<Printer, PrintTask> runningPrintTasks,
+                                 HashMap<Long, PrintTask> runningPrintTasks,
                                  List<Printer> freePrinters,
                                  List<Spool> spools,
                                  List<Spool> freeSpools) {
@@ -62,7 +62,7 @@ public class EfficientSpoolVisitor implements PrinterVisitor {
 
             if (chosenTaskOptional.isPresent()) {
                 PrintTask chosenTask = chosenTaskOptional.get();
-                this.runningPrintTasks.put(fdmPrinter, chosenTask);
+                this.runningPrintTasks.put(fdmPrinter.getId(), chosenTask);
 
                 this.freeSpools.add(Arrays.asList(fdmPrinter.getSpools()).get(0));
                 fdmPrinter.setSpools(List.of(spool));

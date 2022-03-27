@@ -249,10 +249,17 @@ public class CLI implements PropertyChangeListener {
         System.out.print(text + ": ");
     }
 
+    private void displayError(String text) {
+        System.out.println("Error: " + text);
+        System.out.println("Press Enter to continue");
+        this.scanner.nextLine();
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case "error", "instruction" -> System.out.println(evt.getNewValue());
+            case "instruction" -> System.out.println(evt.getNewValue());
+            case "error" -> displayError((String) evt.getNewValue());
         }
     }
 }

@@ -7,14 +7,14 @@ import java.util.*;
 
 public class SpoolSwitchingVisitor implements PrinterVisitor {
     private final List<PrintTask> pendingPrintTasks;
-    private final HashMap<Printer, PrintTask> runningPrintTasks;
+    private final HashMap<Long, PrintTask> runningPrintTasks;
     private final List<Printer> freePrinters;
     private final List<Spool> freeSpools;
     private final PropertyChangeSupport support;
     private PrintTask chosenPrintTask;
 
     public SpoolSwitchingVisitor(List<PrintTask> pendingPrintTasks,
-                                 HashMap<Printer, PrintTask> runningPrintTasks,
+                                 HashMap<Long, PrintTask> runningPrintTasks,
                                  List<Printer> freePrinters,
                                  List<Spool> freeSpools,
                                  PropertyChangeSupport support) {
@@ -55,7 +55,7 @@ public class SpoolSwitchingVisitor implements PrinterVisitor {
 
                 // We assume that if they are the same length that there is a match.
                 if (chosenSpools.size() == printTask.getColors().size()) {
-                    runningPrintTasks.put(fdmPrinter, printTask);
+                    runningPrintTasks.put(fdmPrinter.getId(), printTask);
                     freeSpools.addAll(Arrays.asList(fdmPrinter.getSpools()));
                     fdmPrinter.setSpools(chosenSpools);
 
