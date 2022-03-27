@@ -4,8 +4,8 @@ import nl.saxion.refactor.model.visitor.PrinterVisitor;
 
 public class SLAPrinter implements Printer {
     @Override
-    public int getId() {
-        return 0;
+    public Long getId() {
+        return 0L;
     }
 
     @Override

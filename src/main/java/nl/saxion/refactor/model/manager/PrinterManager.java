@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PrinterManager {
     private final List<Printer> printers;
@@ -72,5 +73,12 @@ public class PrinterManager {
 
     public List<Printer> getFreePrinters() {
         return this.freePrinters;
+    }
+
+    public Optional<Printer> getPrinterById(Long id) {
+        return this.printers
+                .stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst();
     }
 }

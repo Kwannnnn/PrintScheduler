@@ -5,7 +5,7 @@ import nl.saxion.refactor.model.visitor.PrinterVisitor;
 import java.util.List;
 
 public class FDMPrinter implements Printer {
-    private final int id;
+    private final Long id;
     private final String name;
     private final String manufacturer;
     private final int maxX;
@@ -15,7 +15,7 @@ public class FDMPrinter implements Printer {
     private final Spool[] spools;
     private final List<FilamentType> supportedFilaments;
 
-    public FDMPrinter(int id, String name, String manufacturer, int maxX, int maxY, int maxZ, int maxSpools, List<FilamentType> supportedFilaments) {
+    public FDMPrinter(long id, String name, String manufacturer, int maxX, int maxY, int maxZ, int maxSpools, List<FilamentType> supportedFilaments) {
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -46,7 +46,7 @@ public class FDMPrinter implements Printer {
     }
 
     @Override
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
